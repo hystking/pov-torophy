@@ -4,8 +4,8 @@ import { encodeColorDataToSend } from './encodeColorDataToSend';
 
 export function index() {
   const state = {
-    rowNumber: 0,
     columnNumber: 0,
+    rowNumber: 0,
     colorData: [],
     isMouseDown: false,
     isSendingColorData: false,
@@ -15,12 +15,12 @@ export function index() {
     // create new one
     const newColorData = [];
     for (
-      let columnIndex = 0;
-      columnIndex < state.columnNumber;
-      columnIndex += 1
+      let rowIndex = 0;
+      rowIndex < state.rowNumber;
+      rowIndex += 1
     ) {
       const row = [];
-      for (let rowIndex = 0; rowIndex < state.rowNumber; rowIndex += 1) {
+      for (let columnIndex = 0; columnIndex < state.columnNumber; columnIndex += 1) {
         row.push(new Color(0, 0, 0));
       }
       newColorData.push(row);
@@ -29,18 +29,18 @@ export function index() {
     // copy old color data to new one
 
     for (
-      let columnIndex = 0;
-      columnIndex < state.columnNumber;
-      columnIndex += 1
+      let rowIndex = 0;
+      rowIndex < state.rowNumber;
+      rowIndex += 1
     ) {
-      const prevRow = state.colorData[columnIndex];
-      const newRow = newColorData[columnIndex];
+      const prevRow = state.colorData[rowIndex];
+      const newRow = newColorData[rowIndex];
       if (prevRow == null) {
         continue;
       }
-      for (let rowIndex = 0; rowIndex < state.rowNumber; rowIndex += 1) {
-        const prevColor = prevRow[rowIndex];
-        const newColor = newRow[rowIndex];
+      for (let columnIndex = 0; columnIndex < state.columnNumber; columnIndex += 1) {
+        const prevColor = prevRow[columnIndex];
+        const newColor = newRow[columnIndex];
         if (prevColor == null) {
           continue;
         }
@@ -57,16 +57,16 @@ export function index() {
     return dom;
   }
 
-  function createCellsCellDom(columnIndex, rowIndex, color) {
+  function createCellsCellDom(rowIndex, columnIndex, color) {
     const dom = document.createElement('div');
     dom.classList.add('cells__cell');
     dom.style.backgroundColor = color.toCSSString();
     dom.addEventListener('mousedown', () => {
-      fillColorWithCurrentColor(columnIndex, rowIndex);
+      fillColorWithCurrentColor(rowIndex, columnIndex);
     });
     dom.addEventListener('mousemove', () => {
       if (state.isMouseDown) {
-        fillColorWithCurrentColor(columnIndex, rowIndex);
+        fillColorWithCurrentColor(rowIndex, columnIndex);
       }
     });
     return dom;
@@ -77,17 +77,17 @@ export function index() {
     cellsDom.innerHTML = '';
 
     for (
-      let columnIndex = 0;
-      columnIndex < state.colorData.length;
-      columnIndex += 1
+      let rowIndex = 0;
+      rowIndex < state.colorData.length;
+      rowIndex += 1
     ) {
-      const row = state.colorData[columnIndex];
+      const row = state.colorData[rowIndex];
       const cellsRowDom = createCellsRowDom();
-      for (let rowIndex = 0; rowIndex < row.length; rowIndex += 1) {
+      for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
         const cellsCellDom = createCellsCellDom(
-          columnIndex,
           rowIndex,
-          row[rowIndex],
+          columnIndex,
+          row[columnIndex],
         );
         cellsRowDom.appendChild(cellsCellDom);
       }
@@ -100,30 +100,30 @@ export function index() {
       document.getElementById('sendButton').textContent = '送信';
     }
 
-    document.getElementById('rowNumberInput').value = Math.floor(state.rowNumber / 8);
     document.getElementById('columnNumberInput').value = Math.floor(state.columnNumber / 8);
+    document.getElementById('rowNumberInput').value = Math.floor(state.rowNumber / 8);
   }
 
-  function fillColorWithCurrentColor(columnIndex, rowIndex) {
+  function fillColorWithCurrentColor(rowIndex, columnIndex) {
     const hexColorString = document.getElementById('colorPickerInput').value;
-    state.colorData[columnIndex][rowIndex].setFromHexColorString(
+    state.colorData[rowIndex][columnIndex].setFromHexColorString(
       hexColorString,
     );
     update();
   }
 
-  document.getElementById('rowNumberInput').addEventListener('change', () => {
-    state.rowNumber =
-      8 * parseInt(document.getElementById('rowNumberInput').value);
+  document.getElementById('columnNumberInput').addEventListener('change', () => {
+    state.columnNumber =
+      8 * parseInt(document.getElementById('columnNumberInput').value);
     resize();
     update();
   });
 
   document
-    .getElementById('columnNumberInput')
+    .getElementById('rowNumberInput')
     .addEventListener('change', () => {
-      state.columnNumber =
-        8 * parseInt(document.getElementById('columnNumberInput').value);
+      state.rowNumber =
+        8 * parseInt(document.getElementById('rowNumberInput').value);
       resize();
       update();
     });
@@ -171,10 +171,10 @@ export function index() {
     update();
   });
 
-  state.columnNumber =
-    8 * parseInt(document.getElementById('columnNumberInput').value);
   state.rowNumber =
     8 * parseInt(document.getElementById('rowNumberInput').value);
+  state.columnNumber =
+    8 * parseInt(document.getElementById('columnNumberInput').value);
   resize();
   update();
 }
