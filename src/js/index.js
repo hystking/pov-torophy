@@ -148,7 +148,10 @@ export function index() {
   });
 
   document.getElementById('saveButton').addEventListener('click', () => {
-    ipcRenderer.send('save-state', JSON.stringify(state));
+    const savingState = Object.assign({}, state);
+    savingState.isMouseDown = false;
+    savingState.isSendingColor = false;
+    ipcRenderer.send('save-state', JSON.stringify(savingState));
   });
 
   document.getElementById('loadButton').addEventListener('click', () => {
