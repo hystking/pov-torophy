@@ -8,7 +8,7 @@ export function index() {
     columnNumber: 0,
     colorData: [],
     isMouseDown: false,
-    isSendingColor: false,
+    isSendingColorData: false,
   };
 
   function resize() {
@@ -94,7 +94,7 @@ export function index() {
       cellsDom.appendChild(cellsRowDom);
     }
 
-    if (state.isSendingColor) {
+    if (state.isSendingColorData) {
       document.getElementById('sendButton').textContent = '送信中…';
     } else {
       document.getElementById('sendButton').textContent = '送信';
@@ -137,20 +137,20 @@ export function index() {
   });
 
   document.getElementById('sendButton').addEventListener('click', () => {
-    if (state.isSendingColor) {
+    if (state.isSendingColorData) {
       return;
     }
     const data = encodeColorDataToSend(state.colorData);
     console.log(data);
     ipcRenderer.send('send-color-data', data);
-    state.isSendingColor = true;
+    state.isSendingColorData = true;
     update();
   });
 
   document.getElementById('saveButton').addEventListener('click', () => {
     const savingState = Object.assign({}, state);
     savingState.isMouseDown = false;
-    savingState.isSendingColor = false;
+    savingState.isSendingColorData = false;
     ipcRenderer.send('save-state', JSON.stringify(savingState));
   });
 
@@ -159,7 +159,7 @@ export function index() {
   });
 
   ipcRenderer.on('send-color-data-completed', () => {
-    state.isSendingColor = false;
+    state.isSendingColorData = false;
     update();
   });
 
