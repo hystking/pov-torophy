@@ -1,0 +1,44 @@
+.cells {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.cells__row {
+  display: flex;
+}
+
+.cells__cell {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  background: #000;
+  border: solid 1px #333;
+  box-sizing: border-box;
+}
+
+.color-picker {
+  display: block;
+  margin: 20px;
+}
+
+.config {
+  margin: 20px;
+}
+
+.config__heading {
+  font-weight: bold;
+  margin: 0 1em 0 0;
+}
+
+.config__row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.send-button {
+  display: block;
+  margin: 20px;
+}

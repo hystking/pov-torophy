@@ -1,0 +1,48 @@
+extend base
+
+block append meta
+  //- Meta Infomations
+  title POV Torophy
+  meta(name="description" content="")
+  meta(name="keywords" content="")
+
+  //- Facebook OGP
+  meta(name="og:title" content="")
+  meta(name="og:description" content="")
+  meta(name="og:type" content="website")
+  meta(name="og:url" content="")
+  meta(name="og:image" content="")
+  meta(name="og:site_name" content="")
+
+  //- Twitter Card
+  meta(name="twitter:card" content="summary_large_image")
+  meta(name="twitter:title" content="")
+  meta(name="twitter:description" content="")
+  meta(name="twitter:image:src" content="")
+
+block content
+  .config
+    .config__row
+      .config__heading 列[×8]:
+      .config__data
+        input#columnNumberInput(type="number" min="1" step="1" value="1")
+    .config__row
+      .config__heading 行[×8]:
+      .config__data
+        input#rowNumberInput(type="number" min="1" step="1" value="1")
+
+  input#colorPickerInput.color-picker(type="color")
+
+  #cells.cells
+    .cells__row
+      .cells__cell
+      .cells__cell
+      .cells__cell
+      .cells__cell
+    .cells__row
+      .cells__cell
+      .cells__cell
+      .cells__cell
+      .cells__cell
+
+  button#sendButton.send-button 送信

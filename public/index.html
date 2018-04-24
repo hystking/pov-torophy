@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>POV Torophy</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="og:title" content="">
+    <meta name="og:description" content="">
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="">
+    <meta name="og:image" content="">
+    <meta name="og:site_name" content="">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image:src" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="config">
+      <div class="config__row">
+        <div class="config__heading">列[×8]:</div>
+        <div class="config__data">
+          <input id="columnNumberInput" type="number" min="1" step="1" value="1">
+        </div>
+      </div>
+      <div class="config__row">
+        <div class="config__heading">行[×8]:</div>
+        <div class="config__data">
+          <input id="rowNumberInput" type="number" min="1" step="1" value="1">
+        </div>
+      </div>
+    </div>
+    <input class="color-picker" id="colorPickerInput" type="color">
+    <div class="cells" id="cells">
+      <div class="cells__row">
+        <div class="cells__cell"></div>
+        <div class="cells__cell"></div>
+        <div class="cells__cell"></div>
+        <div class="cells__cell"></div>
+      </div>
+      <div class="cells__row">
+        <div class="cells__cell"></div>
+        <div class="cells__cell"></div>
+        <div class="cells__cell"></div>
+        <div class="cells__cell"></div>
+      </div>
+    </div>
+    <button class="send-button" id="sendButton">送信</button>
+    <script src="js/app.js"></script>
+  </body>
+</html>
