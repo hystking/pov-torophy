@@ -98,6 +98,9 @@ export function index() {
     } else {
       document.getElementById('sendButton').textContent = '送信';
     }
+
+    document.getElementById('rowNumberInput').value = Math.floor(state.rowNumber / 8);
+    document.getElementById('columnNumberInput').value = Math.floor(state.columnNumber / 8);
   }
 
   function fillColorWithCurrentColor(columnIndex, rowIndex) {
