@@ -27,13 +27,13 @@ block content
 
   .config
     .config__row
-      .config__heading 列[×8]:
-      .config__data
-        input#columnNumberInput(type="number" min="1" step="1" value="1")
-    .config__row
       .config__heading 行[×8]:
       .config__data
         input#rowNumberInput(type="number" min="1" step="1" value="1")
+    .config__row
+      .config__heading 列[×8]:
+      .config__data
+        input#columnNumberInput(type="number" min="1" step="1" value="1")
 
   input#colorPickerInput.color-picker(type="color")
 
