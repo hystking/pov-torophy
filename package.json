@@ -3,6 +3,13 @@
   "version": "0.0.0",
   "description": "PovTorophy",
   "main": "index.js",
+  "build": {
+    "appId": "com.electron.povtorophy",
+    "files": [
+      "!dist*",
+      "!src*"
+    ]
+  },
   "scripts": {
     "start": "electron .",
     "watch": "npm run webpack -- -w --mode development & npm run pug -- -w & npm run postcss -- --watch; wait",
