@@ -1,8 +1,6 @@
 export function encodeColorDataToSend(colorData) {
-  // 4バイト:　ヘッダ 0xC0, 0xFF, 0xEE, 0x11
-  // 1バイト:　行数
-  // 1バイト:　列数
-  // 3バイト * （列数 * 行数）:　RGBのデータを並べたもの
+  // 形式はREADME参照のこと
+
   const rowNumber = colorData.length;
   const columnNumber = rowNumber <= 0 ? 0 : colorData[0].length;
 

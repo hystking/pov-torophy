@@ -13,18 +13,20 @@ app.on('ready', () => {
   mainWindow.loadURL(`file://${__dirname}/public/index.html`);
 });
 
-// 終了条件
 app.on('window-all-closed', () => {
+  // 終了条件
   app.quit();
 });
 
 ipcMain.on('load-port-info-list', (event, data) => {
+  // シリアルポートのリストを返す
   Serialport.list().then(portInfoList => {
     event.sender.send('port-info-list', portInfoList);
   });
 });
 
 ipcMain.on('send-color-data', (event, data, comName) => {
+  // シリアルポートで色データを送る
   console.log('send-color-data');
   const buffer = Buffer.from(data);
   const port = new Serialport(comName);
@@ -40,6 +42,7 @@ ipcMain.on('send-color-data', (event, data, comName) => {
 });
 
 ipcMain.on('save-state', (event, stateString) => {
+  // 保存のダイアログ
   const defaultPath = 'color-data.json';
   dialog.showSaveDialog(
     {
@@ -58,6 +61,7 @@ ipcMain.on('save-state', (event, stateString) => {
 });
 
 ipcMain.on('open-open-dialog', (event, stateString) => {
+  // ロードのダイアログ
   dialog.showOpenDialog({}, filePaths => {
     if (filePaths == null) {
       return;
