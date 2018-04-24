@@ -21,6 +21,10 @@ block append meta
   meta(name="twitter:image:src" content="")
 
 block content
+  .buttons
+    button#saveButton.save-button 保存
+    button#loadButton.load-button 読み込み
+
   .config
     .config__row
       .config__heading 列[×8]:
@@ -45,4 +49,5 @@ block content
       .cells__cell
       .cells__cell
 
-  button#sendButton.send-button 送信
+  .buttons
+    button#sendButton.send-button 送信
