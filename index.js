@@ -21,6 +21,7 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('send-color-data', (event, data) => {
+  console.log("send-color-data");
   const buffer = Buffer.from(data);
   port.write(buffer);
   event.sender.send('send-color-data-completed');

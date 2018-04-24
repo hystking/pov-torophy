@@ -1,7 +1,7 @@
 const { ipcRenderer } = window.require('electron');
 import { Color } from './Color';
 
-export default function index() {
+export function index() {
   const state = {
     colorData: [],
     isMouseDown: false,

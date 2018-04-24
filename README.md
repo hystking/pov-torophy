@@ -8,6 +8,12 @@ node modules をインストール
 $ yarn
 ```
 
+ビルドする
+
+```sh
+$ yarn build
+```
+
 Mac 用のビルド
 
 ```sh

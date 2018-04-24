@@ -3,23 +3,19 @@
   "version": "0.0.0",
   "description": "PovTorophy",
   "main": "index.js",
-  "config": {
-    "root": "public/",
-    "pug_files": "src/pug/index.pug",
-    "postcss_files": "src/css/style.css"
-  },
   "scripts": {
     "start": "electron .",
-    "watch": "npm run webpack -- -w & npm run pug -- -w & npm run postcss -- --watch; wait",
-    "webpack": "webpack --config webpack.config.js src/js/app.js ${npm_package_config_root}js/app.js",
-    "pug": "pug ${npm_package_config_pug_files} -o ${npm_package_config_root} --pretty",
-    "postcss": "postcss --config postcss.config.js --dir ${npm_package_config_root}css ${npm_package_config_postcss_files} --no-map",
+    "watch": "npm run webpack -- -w --mode development & npm run pug -- -w & npm run postcss -- --watch; wait",
+    "build": "npm run webpack -- --mode production & npm run pug & npm run postcss; wait",
+    "webpack": "webpack-cli --config webpack.config.js",
+    "pug": "pug src/pug/index.pug -o public/ --pretty",
+    "postcss": "postcss --config postcss.config.js --dir public/css src/css/style.css --no-map",
     "dist-mac": "electron-builder",
     "dist-windows64": "electron-builder --windows --x64",
     "dist-windows32": "electron-builder --windows --ia32"
   },
   "devDependencies": {
-    "autoprefixer": "^7.2.5",
+    "autoprefixer": "^8.3.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
@@ -27,10 +23,11 @@
     "cssnano": "^3.10.0",
     "electron": "^1.8.4",
     "electron-builder": "^20.10.0",
-    "postcss-cli": "^4.1.1",
+    "postcss-cli": "^5.0.0",
     "postcss-import": "^11.1.0",
     "pug-cli": "^1.0.0-alpha6",
-    "webpack": "^3.10.0"
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10"
   },
   "babel": {
     "presets": [
