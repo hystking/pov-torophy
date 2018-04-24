@@ -1,16 +1,22 @@
 {
+  "name": "PovTorophy",
+  "version": "0.0.0",
+  "description": "PovTorophy",
+  "main": "index.js",
   "config": {
     "root": "public/",
     "pug_files": "src/pug/index.pug",
     "postcss_files": "src/css/style.css"
   },
   "scripts": {
-    "start": "npm run serve & npm run watch",
-    "serve": "live-server ${npm_package_config_root}",
+    "start": "electron .",
     "watch": "npm run webpack -- -w & npm run pug -- -w & npm run postcss -- --watch; wait",
     "webpack": "webpack --config webpack.config.js src/js/app.js ${npm_package_config_root}js/app.js",
     "pug": "pug ${npm_package_config_pug_files} -o ${npm_package_config_root} --pretty",
-    "postcss": "postcss --config postcss.config.js --dir ${npm_package_config_root}css ${npm_package_config_postcss_files} --no-map"
+    "postcss": "postcss --config postcss.config.js --dir ${npm_package_config_root}css ${npm_package_config_postcss_files} --no-map",
+    "dist-mac": "electron-builder",
+    "dist-windows64": "electron-builder --windows --x64",
+    "dist-windows32": "electron-builder --windows --ia32"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",
@@ -19,7 +25,8 @@
     "babel-preset-env": "^1.6.1",
     "css-mqpacker": "^6.0.1",
     "cssnano": "^3.10.0",
-    "live-server": "hystking/live-server",
+    "electron": "^1.8.4",
+    "electron-builder": "^20.10.0",
     "postcss-cli": "^4.1.1",
     "postcss-import": "^11.1.0",
     "pug-cli": "^1.0.0-alpha6",
@@ -29,5 +36,8 @@
     "presets": [
       "env"
     ]
+  },
+  "dependencies": {
+    "serialport": "^6.2.0"
   }
 }

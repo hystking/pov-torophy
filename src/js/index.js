@@ -1,9 +1,11 @@
+const { ipcRenderer } = window.require('electron');
 import { Color } from './Color';
 
 export default function index() {
   const state = {
     colorData: [],
     isMouseDown: false,
+    isSendingColor: false,
   };
 
   function resize() {
@@ -85,6 +87,12 @@ export default function index() {
       }
       cellsDom.appendChild(cellsRowDom);
     }
+
+    if(state.isSendingColor) {
+      document.getElementById('sendButton').textContent = "送信中…";
+    } else {
+      document.getElementById('sendButton').textContent = "送信";
+    }
   }
 
   function fillColorWithCurrentColor(columnIndex, rowIndex) {
@@ -123,7 +131,7 @@ export default function index() {
       }
     }
 
-    return data.buffer;
+    return data;
   }
 
   document.getElementById('rowNumberInput').addEventListener('change', () => {
@@ -147,10 +155,19 @@ export default function index() {
   });
 
   document.getElementById('sendButton').addEventListener('click', () => {
-    const buffer = encodeColorDataToSend(state.colorData);
-    // ここに送信部分を書く
-    // chrome.serial.send(connectionId, buffer, callback);
-    console.log(buffer);
+    if(state.isSendingColor) {
+      return;
+    }
+    const data = encodeColorDataToSend(state.colorData);
+    console.log(data);
+    ipcRenderer.send('send-color-data', data);
+    state.isSendingColor = true;
+    update();
+  });
+
+  ipcRenderer.on('send-color-data-completed', () => {
+    state.isSendingColor = false;
+    update();
   });
 
   resize();
