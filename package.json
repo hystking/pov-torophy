@@ -24,17 +24,17 @@
   "devDependencies": {
     "autoprefixer": "^8.3.0",
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
-    "css-mqpacker": "^6.0.1",
+    "css-mqpacker": "^6.0.2",
     "cssnano": "^3.10.0",
     "electron": "^1.8.4",
     "electron-builder": "^20.10.0",
     "postcss-cli": "^5.0.0",
     "postcss-import": "^11.1.0",
     "pug-cli": "^1.0.0-alpha6",
-    "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.10"
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
   },
   "babel": {
     "presets": [

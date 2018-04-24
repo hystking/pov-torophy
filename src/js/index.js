@@ -14,13 +14,13 @@ export function index() {
   function resize() {
     // create new one
     const newColorData = [];
-    for (
-      let rowIndex = 0;
-      rowIndex < state.rowNumber;
-      rowIndex += 1
-    ) {
+    for (let rowIndex = 0; rowIndex < state.rowNumber; rowIndex += 1) {
       const row = [];
-      for (let columnIndex = 0; columnIndex < state.columnNumber; columnIndex += 1) {
+      for (
+        let columnIndex = 0;
+        columnIndex < state.columnNumber;
+        columnIndex += 1
+      ) {
         row.push(new Color(0, 0, 0));
       }
       newColorData.push(row);
@@ -28,17 +28,17 @@ export function index() {
 
     // copy old color data to new one
 
-    for (
-      let rowIndex = 0;
-      rowIndex < state.rowNumber;
-      rowIndex += 1
-    ) {
+    for (let rowIndex = 0; rowIndex < state.rowNumber; rowIndex += 1) {
       const prevRow = state.colorData[rowIndex];
       const newRow = newColorData[rowIndex];
       if (prevRow == null) {
         continue;
       }
-      for (let columnIndex = 0; columnIndex < state.columnNumber; columnIndex += 1) {
+      for (
+        let columnIndex = 0;
+        columnIndex < state.columnNumber;
+        columnIndex += 1
+      ) {
         const prevColor = prevRow[columnIndex];
         const newColor = newRow[columnIndex];
         if (prevColor == null) {
@@ -76,11 +76,7 @@ export function index() {
     const cellsDom = document.getElementById('cells');
     cellsDom.innerHTML = '';
 
-    for (
-      let rowIndex = 0;
-      rowIndex < state.colorData.length;
-      rowIndex += 1
-    ) {
+    for (let rowIndex = 0; rowIndex < state.colorData.length; rowIndex += 1) {
       const row = state.colorData[rowIndex];
       const cellsRowDom = createCellsRowDom();
       for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
@@ -100,8 +96,12 @@ export function index() {
       document.getElementById('sendButton').textContent = '送信';
     }
 
-    document.getElementById('columnNumberInput').value = Math.floor(state.columnNumber / 8);
-    document.getElementById('rowNumberInput').value = Math.floor(state.rowNumber / 8);
+    document.getElementById('columnNumberInput').value = Math.floor(
+      state.columnNumber / 8,
+    );
+    document.getElementById('rowNumberInput').value = Math.floor(
+      state.rowNumber / 8,
+    );
   }
 
   function fillColorWithCurrentColor(rowIndex, columnIndex) {
@@ -112,21 +112,21 @@ export function index() {
     update();
   }
 
-  document.getElementById('columnNumberInput').addEventListener('change', () => {
-    state.columnNumber =
-      8 * parseInt(document.getElementById('columnNumberInput').value);
-    resize();
-    update();
-  });
-
   document
-    .getElementById('rowNumberInput')
+    .getElementById('columnNumberInput')
     .addEventListener('change', () => {
-      state.rowNumber =
-        8 * parseInt(document.getElementById('rowNumberInput').value);
+      state.columnNumber =
+        8 * parseInt(document.getElementById('columnNumberInput').value);
       resize();
       update();
     });
+
+  document.getElementById('rowNumberInput').addEventListener('change', () => {
+    state.rowNumber =
+      8 * parseInt(document.getElementById('rowNumberInput').value);
+    resize();
+    update();
+  });
 
   window.addEventListener('mousedown', () => {
     state.isMouseDown = true;
@@ -141,8 +141,11 @@ export function index() {
       return;
     }
     const data = encodeColorDataToSend(state.colorData);
-    console.log(data);
-    ipcRenderer.send('send-color-data', data);
+    const comName =
+      comNameList.options == null
+        ? ''
+        : comNameList.options[comNameList.selectedIndex].value;
+    ipcRenderer.send('send-color-data', data, comName);
     state.isSendingColorData = true;
     update();
   });
@@ -171,10 +174,39 @@ export function index() {
     update();
   });
 
+  ipcRenderer.on('port-info-list', (event, portInfoList) => {
+    const comNameList = portInfoList.map(({ comName }) => comName);
+    const arduinoPortInfo = portInfoList.find(
+      ({ manufacturer }) => manufacturer && /Arduino/.test(manufacturer),
+    );
+    const selectedOptionValue =
+      comNameList.options == null
+        ? arduinoPortInfo == null
+          ? ''
+          : arduinoPortInfo.comName
+        : comNameList.options[comNameList.selectedIndex].value;
+
+    const comNameListDom = document.getElementById('comNameList');
+    comNameListDom.innerHTML = '';
+
+    for (let i = 0; i < comNameList.length; i += 1) {
+      const comName = comNameList[i];
+      const optionDom = document.createElement('option');
+      optionDom.value = comName;
+      optionDom.textContent = comName;
+      comNameListDom.appendChild(optionDom);
+      if (comName === selectedOptionValue) {
+        comNameListDom.selectedIndex = i;
+      }
+    }
+  });
+
   state.rowNumber =
     8 * parseInt(document.getElementById('rowNumberInput').value);
   state.columnNumber =
     8 * parseInt(document.getElementById('columnNumberInput').value);
   resize();
   update();
+
+  ipcRenderer.send('load-port-info-list');
 }

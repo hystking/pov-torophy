@@ -1,1 +1,133 @@
-!function(e){var n={};function t(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,t),r.l=!0,r.exports}t.m=e,t.c=n,t.d=function(e,n,o){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:o})},t.r=function(e){Object.defineProperty(e,"__esModule",{value:!0})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},t.p="",t(t.s=4)}([function(e,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0}),n.encodeColorDataToSend=function(e){var n=e.length,t=n<=0?0:e[0].length,o=new Uint8Array(6+n*t*3);o[0]=192,o[1]=255,o[2]=238,o[3]=17,o[4]=n,o[5]=t;for(var r=0;r<n;r+=1)for(var u=0;u<t;u+=1){var a=e[r][u],c=6+3*(r*t+u);o[c]=a.red,o[c+1]=a.green,o[c+2]=a.blue}return o}},function(e,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var o=function(){function e(e,n){for(var t=0;t<n.length;t++){var o=n[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}return function(n,t,o){return t&&e(n.prototype,t),o&&e(n,o),n}}();n.Color=function(){function e(n,t,o){!function(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")}(this,e),this.set(n,t,o)}return o(e,[{key:"setFromHexColorString",value:function(e){var n=parseInt(e.substr(1,2),16),t=parseInt(e.substr(3,2),16),o=parseInt(e.substr(5,2),16);this.set(n,t,o)}},{key:"set",value:function(e,n,t){this.red=e,this.green=n,this.blue=t}},{key:"toCSSString",value:function(){return"rgb("+this.red+", "+this.green+", "+this.blue+")"}}]),e}()},function(e,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0}),n.index=function(){var e={columnNumber:0,rowNumber:0,colorData:[],isMouseDown:!1,isSendingColorData:!1};function n(){for(var n=[],t=0;t<e.rowNumber;t+=1){for(var r=[],u=0;u<e.columnNumber;u+=1)r.push(new o.Color(0,0,0));n.push(r)}for(var a=0;a<e.rowNumber;a+=1){var c=e.colorData[a],i=n[a];if(null!=c)for(var l=0;l<e.columnNumber;l+=1){var s=c[l],d=i[l];null!=s&&d.set(s.red,s.green,s.blue)}}e.colorData=n}function t(){var e=document.createElement("div");return e.classList.add("cells__row"),e}function a(n,t,o){var r=document.createElement("div");return r.classList.add("cells__cell"),r.style.backgroundColor=o.toCSSString(),r.addEventListener("mousedown",function(){i(n,t)}),r.addEventListener("mousemove",function(){e.isMouseDown&&i(n,t)}),r}function c(){var n=document.getElementById("cells");n.innerHTML="";for(var o=0;o<e.colorData.length;o+=1){for(var r=e.colorData[o],u=t(),c=0;c<r.length;c+=1){var i=a(o,c,r[c]);u.appendChild(i)}n.appendChild(u)}e.isSendingColorData?document.getElementById("sendButton").textContent="送信中…":document.getElementById("sendButton").textContent="送信",document.getElementById("columnNumberInput").value=Math.floor(e.columnNumber/8),document.getElementById("rowNumberInput").value=Math.floor(e.rowNumber/8)}function i(n,t){var o=document.getElementById("colorPickerInput").value;e.colorData[n][t].setFromHexColorString(o),c()}document.getElementById("columnNumberInput").addEventListener("change",function(){e.columnNumber=8*parseInt(document.getElementById("columnNumberInput").value),n(),c()}),document.getElementById("rowNumberInput").addEventListener("change",function(){e.rowNumber=8*parseInt(document.getElementById("rowNumberInput").value),n(),c()}),window.addEventListener("mousedown",function(){e.isMouseDown=!0}),window.addEventListener("mouseup",function(){e.isMouseDown=!1}),document.getElementById("sendButton").addEventListener("click",function(){if(!e.isSendingColorData){var n=(0,r.encodeColorDataToSend)(e.colorData);console.log(n),u.send("send-color-data",n),e.isSendingColorData=!0,c()}}),document.getElementById("saveButton").addEventListener("click",function(){var n=Object.assign({},e);n.isMouseDown=!1,n.isSendingColorData=!1,u.send("save-state",JSON.stringify(n))}),document.getElementById("loadButton").addEventListener("click",function(){u.send("open-open-dialog")}),u.on("send-color-data-completed",function(){e.isSendingColorData=!1,c()}),u.on("load-state",function(t,o){console.log(o);var r=JSON.parse(o);Object.assign(e,r),n(),c()}),e.rowNumber=8*parseInt(document.getElementById("rowNumberInput").value),e.columnNumber=8*parseInt(document.getElementById("columnNumberInput").value),n(),c()};var o=t(1),r=t(0),u=window.require("electron").ipcRenderer},function(e,n,t){"use strict";var o=t(2);!function(e){switch(e){case"/":case"/index.html":default:(0,o.index)()}}(window.location.pathname)},function(e,n,t){e.exports=t(3)}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/js/Color.js":
+/*!*************************!*\
+  !*** ./src/js/Color.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nvar Color = exports.Color = function () {\n  function Color(red, green, blue) {\n    _classCallCheck(this, Color);\n\n    this.set(red, green, blue);\n  }\n\n  _createClass(Color, [{\n    key: \"setFromHexColorString\",\n    value: function setFromHexColorString(hexColorString) {\n      var red = parseInt(hexColorString.substr(1, 2), 16);\n      var green = parseInt(hexColorString.substr(3, 2), 16);\n      var blue = parseInt(hexColorString.substr(5, 2), 16);\n      this.set(red, green, blue);\n    }\n  }, {\n    key: \"set\",\n    value: function set(red, green, blue) {\n      this.red = red;\n      this.green = green;\n      this.blue = blue;\n    }\n  }, {\n    key: \"toCSSString\",\n    value: function toCSSString() {\n      return \"rgb(\" + this.red + \", \" + this.green + \", \" + this.blue + \")\";\n    }\n  }]);\n\n  return Color;\n}();\n\n//# sourceURL=webpack:///./src/js/Color.js?");
+
+/***/ }),
+
+/***/ "./src/js/app.js":
+/*!***********************!*\
+  !*** ./src/js/app.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar _index = __webpack_require__(/*! ./index */ \"./src/js/index.js\");\n\nfunction routes(path) {\n  switch (path) {\n    case '/':\n    case '/index.html':\n    default:\n      return (0, _index.index)();\n  }\n}\n\nroutes(window.location.pathname);\n\n//# sourceURL=webpack:///./src/js/app.js?");
+
+/***/ }),
+
+/***/ "./src/js/encodeColorDataToSend.js":
+/*!*****************************************!*\
+  !*** ./src/js/encodeColorDataToSend.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.encodeColorDataToSend = encodeColorDataToSend;\nfunction encodeColorDataToSend(colorData) {\n  // 4バイト:　ヘッダ 0xC0, 0xFF, 0xEE, 0x11\n  // 1バイト:　行数\n  // 1バイト:　列数\n  // 3バイト * （列数 * 行数）:　RGBのデータを並べたもの\n  var rowNumber = colorData.length;\n  var columnNumber = rowNumber <= 0 ? 0 : colorData[0].length;\n\n  var dataSize = 4 + 2 + rowNumber * columnNumber * 3;\n  var data = new Uint8Array(dataSize);\n\n  data[0] = 0xc0;\n  data[1] = 0xff;\n  data[2] = 0xee;\n  data[3] = 0x11;\n  data[4 + 0] = rowNumber;\n  data[4 + 1] = columnNumber;\n\n  for (var rowIndex = 0; rowIndex < rowNumber; rowIndex += 1) {\n    for (var columnIndex = 0; columnIndex < columnNumber; columnIndex += 1) {\n      var color = colorData[rowIndex][columnIndex];\n      var index = 4 + 2 + (rowIndex * columnNumber + columnIndex) * 3;\n      data[index] = color.red;\n      data[index + 1] = color.green;\n      data[index + 2] = color.blue;\n    }\n  }\n\n  return data;\n}\n\n//# sourceURL=webpack:///./src/js/encodeColorDataToSend.js?");
+
+/***/ }),
+
+/***/ "./src/js/index.js":
+/*!*************************!*\
+  !*** ./src/js/index.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.index = index;\n\nvar _Color = __webpack_require__(/*! ./Color */ \"./src/js/Color.js\");\n\nvar _encodeColorDataToSend = __webpack_require__(/*! ./encodeColorDataToSend */ \"./src/js/encodeColorDataToSend.js\");\n\nvar _window$require = window.require('electron'),\n    ipcRenderer = _window$require.ipcRenderer;\n\nfunction index() {\n  var state = {\n    columnNumber: 0,\n    rowNumber: 0,\n    colorData: [],\n    isMouseDown: false,\n    isSendingColorData: false\n  };\n\n  function resize() {\n    // create new one\n    var newColorData = [];\n    for (var rowIndex = 0; rowIndex < state.rowNumber; rowIndex += 1) {\n      var row = [];\n      for (var columnIndex = 0; columnIndex < state.columnNumber; columnIndex += 1) {\n        row.push(new _Color.Color(0, 0, 0));\n      }\n      newColorData.push(row);\n    }\n\n    // copy old color data to new one\n\n    for (var _rowIndex = 0; _rowIndex < state.rowNumber; _rowIndex += 1) {\n      var prevRow = state.colorData[_rowIndex];\n      var newRow = newColorData[_rowIndex];\n      if (prevRow == null) {\n        continue;\n      }\n      for (var _columnIndex = 0; _columnIndex < state.columnNumber; _columnIndex += 1) {\n        var prevColor = prevRow[_columnIndex];\n        var newColor = newRow[_columnIndex];\n        if (prevColor == null) {\n          continue;\n        }\n        newColor.set(prevColor.red, prevColor.green, prevColor.blue);\n      }\n    }\n\n    state.colorData = newColorData;\n  }\n\n  function createCellsRowDom() {\n    var dom = document.createElement('div');\n    dom.classList.add('cells__row');\n    return dom;\n  }\n\n  function createCellsCellDom(rowIndex, columnIndex, color) {\n    var dom = document.createElement('div');\n    dom.classList.add('cells__cell');\n    dom.style.backgroundColor = color.toCSSString();\n    dom.addEventListener('mousedown', function () {\n      fillColorWithCurrentColor(rowIndex, columnIndex);\n    });\n    dom.addEventListener('mousemove', function () {\n      if (state.isMouseDown) {\n        fillColorWithCurrentColor(rowIndex, columnIndex);\n      }\n    });\n    return dom;\n  }\n\n  function update() {\n    var cellsDom = document.getElementById('cells');\n    cellsDom.innerHTML = '';\n\n    for (var rowIndex = 0; rowIndex < state.colorData.length; rowIndex += 1) {\n      var row = state.colorData[rowIndex];\n      var cellsRowDom = createCellsRowDom();\n      for (var columnIndex = 0; columnIndex < row.length; columnIndex += 1) {\n        var cellsCellDom = createCellsCellDom(rowIndex, columnIndex, row[columnIndex]);\n        cellsRowDom.appendChild(cellsCellDom);\n      }\n      cellsDom.appendChild(cellsRowDom);\n    }\n\n    if (state.isSendingColorData) {\n      document.getElementById('sendButton').textContent = '送信中…';\n    } else {\n      document.getElementById('sendButton').textContent = '送信';\n    }\n\n    document.getElementById('columnNumberInput').value = Math.floor(state.columnNumber / 8);\n    document.getElementById('rowNumberInput').value = Math.floor(state.rowNumber / 8);\n  }\n\n  function fillColorWithCurrentColor(rowIndex, columnIndex) {\n    var hexColorString = document.getElementById('colorPickerInput').value;\n    state.colorData[rowIndex][columnIndex].setFromHexColorString(hexColorString);\n    update();\n  }\n\n  document.getElementById('columnNumberInput').addEventListener('change', function () {\n    state.columnNumber = 8 * parseInt(document.getElementById('columnNumberInput').value);\n    resize();\n    update();\n  });\n\n  document.getElementById('rowNumberInput').addEventListener('change', function () {\n    state.rowNumber = 8 * parseInt(document.getElementById('rowNumberInput').value);\n    resize();\n    update();\n  });\n\n  window.addEventListener('mousedown', function () {\n    state.isMouseDown = true;\n  });\n\n  window.addEventListener('mouseup', function () {\n    state.isMouseDown = false;\n  });\n\n  document.getElementById('sendButton').addEventListener('click', function () {\n    if (state.isSendingColorData) {\n      return;\n    }\n    var data = (0, _encodeColorDataToSend.encodeColorDataToSend)(state.colorData);\n    var comName = comNameList.options == null ? '' : comNameList.options[comNameList.selectedIndex].value;\n    ipcRenderer.send('send-color-data', data, comName);\n    state.isSendingColorData = true;\n    update();\n  });\n\n  document.getElementById('saveButton').addEventListener('click', function () {\n    var savingState = Object.assign({}, state);\n    savingState.isMouseDown = false;\n    savingState.isSendingColorData = false;\n    ipcRenderer.send('save-state', JSON.stringify(savingState));\n  });\n\n  document.getElementById('loadButton').addEventListener('click', function () {\n    ipcRenderer.send('open-open-dialog');\n  });\n\n  ipcRenderer.on('send-color-data-completed', function () {\n    state.isSendingColorData = false;\n    update();\n  });\n\n  ipcRenderer.on('load-state', function (event, stateString) {\n    console.log(stateString);\n    var newState = JSON.parse(stateString);\n    Object.assign(state, newState);\n    resize();\n    update();\n  });\n\n  ipcRenderer.on('port-info-list', function (event, portInfoList) {\n    var comNameList = portInfoList.map(function (_ref) {\n      var comName = _ref.comName;\n      return comName;\n    });\n    var arduinoPortInfo = portInfoList.find(function (_ref2) {\n      var manufacturer = _ref2.manufacturer;\n      return manufacturer && /Arduino/.test(manufacturer);\n    });\n    var selectedOptionValue = comNameList.options == null ? arduinoPortInfo == null ? '' : arduinoPortInfo.comName : comNameList.options[comNameList.selectedIndex].value;\n\n    var comNameListDom = document.getElementById('comNameList');\n    comNameListDom.innerHTML = '';\n\n    for (var i = 0; i < comNameList.length; i += 1) {\n      var comName = comNameList[i];\n      var optionDom = document.createElement('option');\n      optionDom.value = comName;\n      optionDom.textContent = comName;\n      comNameListDom.appendChild(optionDom);\n      if (comName === selectedOptionValue) {\n        comNameListDom.selectedIndex = i;\n      }\n    }\n  });\n\n  state.rowNumber = 8 * parseInt(document.getElementById('rowNumberInput').value);\n  state.columnNumber = 8 * parseInt(document.getElementById('columnNumberInput').value);\n  resize();\n  update();\n\n  ipcRenderer.send('load-port-info-list');\n}\n\n//# sourceURL=webpack:///./src/js/index.js?");
+
+/***/ }),
+
+/***/ 0:
+/*!*****************************!*\
+  !*** multi ./src/js/app.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__(/*! /Users/nakayama-yuhei/Works/cl-torophy/src/js/app.js */\"./src/js/app.js\");\n\n\n//# sourceURL=webpack:///multi_./src/js/app.js?");
+
+/***/ })
+
+/******/ });

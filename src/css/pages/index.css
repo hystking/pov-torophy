@@ -45,7 +45,8 @@
 
 .send-button,
 .save-button,
-.load-button {
+.load-button,
+.com-name-list {
   display: block;
   margin: 0 10px 0 0;
 }
