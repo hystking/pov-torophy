@@ -1,6 +1,7 @@
 const { ipcRenderer } = window.require('electron');
 import { Color } from './Color';
 import { encodeColorDataToSend } from './encodeColorDataToSend';
+import { DomLogger } from './DomLogger';
 
 export function index() {
   const state = {
@@ -167,7 +168,6 @@ export function index() {
   });
 
   ipcRenderer.on('load-state', (event, stateString) => {
-    console.log(stateString);
     const newState = JSON.parse(stateString);
     Object.assign(state, newState);
     resize();
@@ -201,10 +201,17 @@ export function index() {
     }
   });
 
+  ipcRenderer.on('log', (event, message) => {
+    logger.log(message);
+  });
+
+  const logger = new DomLogger(document.getElementById("logger"), 10);
+
   state.rowNumber =
     8 * parseInt(document.getElementById('rowNumberInput').value);
   state.columnNumber =
     8 * parseInt(document.getElementById('columnNumberInput').value);
+
   resize();
   update();
 

@@ -1,13 +1,18 @@
 const fs = require('fs');
 const Serialport = require('serialport');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { Logger } = require("./Logger");
+
+let mainWindow;
+let logger;
 
 app.on('ready', () => {
   // メインのウィンドウ
   mainWindow = new BrowserWindow({
-    width: 720,
-    height: 480,
+    width: 800,
+    height: 600,
   });
+  logger = new Logger(mainWindow);
 
   // メインのウィンドウをロード
   mainWindow.loadURL(`file://${__dirname}/public/index.html`);
@@ -27,14 +32,15 @@ ipcMain.on('load-port-info-list', (event, data) => {
 
 ipcMain.on('send-color-data', (event, data, comName) => {
   // シリアルポートで色データを送る
-  console.log('send-color-data');
+  logger.log('シリアルポートで送信開始');
   const buffer = Buffer.from(data);
   const port = new Serialport(comName);
   port.write(buffer, err => {
     if(err) {
-      console.log(err.message);
+      logger.log("送信中にエラーが起きました");
+      logger.log(err.message);
     } else {
-      console.log("write ended");
+      logger.log("送信完了");
     }
     port.close();
     event.sender.send('send-color-data-completed');

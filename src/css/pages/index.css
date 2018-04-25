@@ -50,3 +50,15 @@
   display: block;
   margin: 0 10px 0 0;
 }
+
+.logger {
+  margin: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  border: solid 1px #333;
+}
+
+.logger__line {
+  white-space: nowrap;
+  min-height: 1em;
+}
