@@ -55,7 +55,8 @@
   margin: 20px;
   display: flex;
   flex-direction: column-reverse;
-  border: solid 1px #333;
+  background: #eee;
+  overflow: auto;
 }
 
 .logger__line {

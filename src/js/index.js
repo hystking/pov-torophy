@@ -93,8 +93,10 @@ export function index() {
 
     if (state.isSendingColorData) {
       document.getElementById('sendButton').textContent = '送信中…';
+      document.getElementById('sendButton').setAttribute('disabled', '1');
     } else {
       document.getElementById('sendButton').textContent = '送信';
+      document.getElementById('sendButton').removeAttribute('disabled');
     }
 
     document.getElementById('columnNumberInput').value = Math.floor(
@@ -205,7 +207,7 @@ export function index() {
     logger.log(message);
   });
 
-  const logger = new DomLogger(document.getElementById("logger"), 10);
+  const logger = new DomLogger(document.getElementById("logger"), 8);
 
   state.rowNumber =
     8 * parseInt(document.getElementById('rowNumberInput').value);
