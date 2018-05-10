@@ -4,7 +4,7 @@ export function encodeColorDataToSend(colorData) {
   const rowNumber = colorData.length;
   const columnNumber = rowNumber <= 0 ? 0 : colorData[0].length;
 
-  const dataSize = 4 + 2 + rowNumber * columnNumber * 3;
+  const dataSize = 4 + 2 + rowNumber * columnNumber;
   const data = new Uint8Array(dataSize);
 
   data[0] = 0xc0;
@@ -17,10 +17,11 @@ export function encodeColorDataToSend(colorData) {
   for (let rowIndex = 0; rowIndex < rowNumber; rowIndex += 1) {
     for (let columnIndex = 0; columnIndex < columnNumber; columnIndex += 1) {
       const color = colorData[rowIndex][columnIndex];
-      const index = 4 + 2 + (rowIndex * columnNumber + columnIndex) * 3;
-      data[index] = color.red;
-      data[index + 1] = color.green;
-      data[index + 2] = color.blue;
+      const index = 4 + 2 + (rowIndex * columnNumber + columnIndex);
+      const flagR = color.red > 127 ? 0b100 : 0;
+      const flagG = color.green > 127 ? 0b010 : 0;
+      const flagB = color.blue > 127 ? 0b001 : 0;
+      data[index] = flagR | flagG | flagB;
     }
   }
 
