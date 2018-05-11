@@ -4,6 +4,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { Logger } = require('./Logger');
 
 const MAX_SUB_BUFFER_SIZE = 128;
+const SUB_BUFFER_WAIT = 1000;
 
 let mainWindow;
 let logger;
@@ -48,7 +49,9 @@ ipcMain.on('send-color-data', (event, data, comName) => {
       } else {
         logger.log(`${sendingIndex + subBufferSize}[bytes] 送信完了`);
       }
-      sendChunk(sendingIndex + subBufferSize);
+      setTimeout(function() {
+        sendChunk(sendingIndex + subBufferSize);
+      }, SUB_BUFFER_WAIT);
     });
   }
   const buffer = Buffer.from(data);
