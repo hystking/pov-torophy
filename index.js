@@ -3,9 +3,6 @@ const Serialport = require('serialport');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { Logger } = require('./Logger');
 
-const MAX_SUB_BUFFER_SIZE = 128;
-const SUB_BUFFER_WAIT = 1000;
-
 let mainWindow;
 let logger;
 
@@ -33,14 +30,14 @@ ipcMain.on('load-port-info-list', (event, data) => {
   });
 });
 
-ipcMain.on('send-color-data', (event, data, comName) => {
+ipcMain.on('send-color-data', (event, data, comName, maxBufferSize, sendingInterval) => {
   // シリアルポートで色データを送る
   function sendChunk(sendingIndex) {
     if (sendingIndex >= data.length) {
       port.close();
       return;
     }
-    const subBufferSize = Math.min(data.length - sendingIndex, MAX_SUB_BUFFER_SIZE);
+    const subBufferSize = Math.min(data.length - sendingIndex, maxBufferSize);
     const subBuffer = Buffer.from(data.slice(sendingIndex, sendingIndex + subBufferSize));
     port.write(subBuffer, err => {
       if (err) {
@@ -51,7 +48,7 @@ ipcMain.on('send-color-data', (event, data, comName) => {
       }
       setTimeout(function() {
         sendChunk(sendingIndex + subBufferSize);
-      }, SUB_BUFFER_WAIT);
+      }, sendingInterval);
     });
   }
   // const buffer = Buffer.from(data);

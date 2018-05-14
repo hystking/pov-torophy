@@ -49,8 +49,25 @@ block content
       .cells__cell
       .cells__cell
 
+  .config
+    .config__row
+      .config__heading 送信ポート:
+      .config__data
+        select#comNameList.com-name-list
+    .config__row
+      .config__heading 転送レート[bps]:
+      .config__data
+        input#baudRate(type="number" min="1" step="1" value="9600")
+    .config__row
+      .config__heading 送信バッファの分割サイズ[bytes]:
+      .config__data
+        input#maxBufferSize(type="number" min="1" step="1" value="32")
+    .config__row
+      .config__heading 送信間隔[msec]:
+      .config__data
+        input#sendingInterval(type="number" min="1" step="1" value="500")
+
   .buttons
-    select#comNameList.com-name-list
     button#sendButton.send-button 送信
 
   .logger#logger
