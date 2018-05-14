@@ -55,8 +55,33 @@
         <div class="cells__cell"></div>
       </div>
     </div>
+    <div class="config">
+      <div class="config__row">
+        <div class="config__heading">送信ポート:</div>
+        <div class="config__data">
+          <select class="com-name-list" id="comNameList"></select>
+        </div>
+      </div>
+      <div class="config__row">
+        <div class="config__heading">転送レート[bps]:</div>
+        <div class="config__data">
+          <input id="baudRate" type="number" min="1" step="1" value="9600">
+        </div>
+      </div>
+      <div class="config__row">
+        <div class="config__heading">送信バッファの分割サイズ[bytes]:</div>
+        <div class="config__data">
+          <input id="maxBufferSize" type="number" min="1" step="1" value="32">
+        </div>
+      </div>
+      <div class="config__row">
+        <div class="config__heading">送信間隔[msec]:</div>
+        <div class="config__data">
+          <input id="sendingInterval" type="number" min="1" step="1" value="500">
+        </div>
+      </div>
+    </div>
     <div class="buttons">
-      <select class="com-name-list" id="comNameList"></select>
       <button class="send-button" id="sendButton">送信</button>
     </div>
     <div class="logger" id="logger"></div>
