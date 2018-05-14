@@ -148,7 +148,9 @@ export function index() {
       comNameList.options == null
         ? ''
         : comNameList.options[comNameList.selectedIndex].value;
-    ipcRenderer.send('send-color-data', data, comName);
+    const maxBufferSize = parseInt(document.getElementById("maxBufferSize").value);
+    const sendingInterval = parseInt(document.getElementById("sendingInterval").value);
+    ipcRenderer.send('send-color-data', data, comName, maxBufferSize, sendingInterval);
     state.isSendingColorData = true;
     update();
   });
