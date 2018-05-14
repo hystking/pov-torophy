@@ -36,13 +36,13 @@ ipcMain.on('load-port-info-list', (event, data) => {
 ipcMain.on('send-color-data', (event, data, comName) => {
   // シリアルポートで色データを送る
   function sendChunk(sendingIndex) {
-    if (sendingIndex >= buffer.length) {
+    if (sendingIndex >= data.length) {
       port.close();
       return;
     }
-    const subBufferSize = Math.min(buffer.length - sendingIndex, MAX_SUB_BUFFER_SIZE);
-    const subBuffer = Buffer.from(buffer, sendingIndex, subBufferSize);
-    port.write(buffer, err => {
+    const subBufferSize = Math.min(data.length - sendingIndex, MAX_SUB_BUFFER_SIZE);
+    const subBuffer = Buffer.from(data.slice(sendingIndex, sendingIndex + subBufferSize));
+    port.write(subBuffer, err => {
       if (err) {
         logger.log('送信中にエラーが起きました');
         logger.log(err.message);
@@ -54,7 +54,7 @@ ipcMain.on('send-color-data', (event, data, comName) => {
       }, SUB_BUFFER_WAIT);
     });
   }
-  const buffer = Buffer.from(data);
+  // const buffer = Buffer.from(data);
   const port = new Serialport(comName);
 
   port.on('error', err => {
@@ -68,7 +68,7 @@ ipcMain.on('send-color-data', (event, data, comName) => {
     event.sender.send('send-color-data-completed');
   });
 
-  logger.log(`送信開始 合計バイト数: ${buffer.length}[bytes]`);
+  logger.log(`送信開始 合計バイト数: ${data.length}[bytes]`);
   sendChunk(0);
 });
 
