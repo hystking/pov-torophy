@@ -58,6 +58,11 @@ block content
       .config__heading 転送レート[bps]:
       .config__data
         input#baudRate(type="number" min="1" step="1" value="9600")
+
+  .buttons
+    button#openPortButton.open-port-button 接続
+
+  .config
     .config__row
       .config__heading 送信バッファの分割サイズ[bytes]:
       .config__data

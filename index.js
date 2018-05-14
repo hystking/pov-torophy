@@ -31,7 +31,29 @@ ipcMain.on('load-port-info-list', (event, data) => {
   });
 });
 
-ipcMain.on('send-color-data', (event, data, comName, maxBufferSize, sendingInterval) => {
+ipcMain.on('open-port', (event, comName, baudRate) => {
+  if(port) {
+    port.close();
+  }
+
+  port = new Serialport(comName, {
+    baudRate: baudRate,
+  });
+
+  port.on('error', err => {
+    logger.log(`${comName}:${baudRate} に送信中にエラーが起きました`);
+    logger.log(err.message);
+  });
+
+  port.on('close', err => {
+    logger.log(`${comName}:${baudRate} を切断しました`);
+  });
+
+  logger.log(`${comName}:${baudRate} に接続しました`);
+  event.sender.send('port-opened');
+});
+
+ipcMain.on('send-color-data', (event, data, maxBufferSize, sendingInterval) => {
   // シリアルポートで色データを送る
   function sendChunk(sendingIndex) {
     if (sendingIndex >= data.length) {
@@ -53,17 +75,6 @@ ipcMain.on('send-color-data', (event, data, comName, maxBufferSize, sendingInter
       }, sendingInterval);
     });
   }
-
-  if(port == null) {
-    port = new Serialport(comName);
-  }
-
-  port.on('error', err => {
-    logger.log('送信中にエラーが起きました');
-    logger.log(err.message);
-    event.sender.send('send-color-data-completed');
-  });
-
   logger.log(`送信開始 合計バイト数: ${data.length}[bytes]`);
   sendChunk(0);
 });
