@@ -10,6 +10,7 @@ export function index() {
     colorData: [],
     isMouseDown: false,
     isSendingColorData: false,
+    isComNameFixed: false,
   };
 
   function resize() {
@@ -105,6 +106,12 @@ export function index() {
     document.getElementById('rowNumberInput').value = Math.floor(
       state.rowNumber / 8,
     );
+
+    if (state.isComNameFixed) {
+      document.getElementById('comNameList').setAttribute('disabled', '1');
+    } else {
+      document.getElementById('comNameList').removeAttribute('disabled');
+    }
   }
 
   function fillColorWithCurrentColor(rowIndex, columnIndex) {
@@ -144,14 +151,26 @@ export function index() {
       return;
     }
     const data = encodeColorDataToSend(state.colorData);
+    const comNameListDom = document.getElementById('comNameList');
     const comName =
-      comNameList.options == null
+      comNameListDom.options == null
         ? ''
-        : comNameList.options[comNameList.selectedIndex].value;
-    const maxBufferSize = parseInt(document.getElementById("maxBufferSize").value);
-    const sendingInterval = parseInt(document.getElementById("sendingInterval").value);
-    ipcRenderer.send('send-color-data', data, comName, maxBufferSize, sendingInterval);
+        : comNameListDom.options[comNameListDom.selectedIndex].value;
+    const maxBufferSize = parseInt(
+      document.getElementById('maxBufferSize').value,
+    );
+    const sendingInterval = parseInt(
+      document.getElementById('sendingInterval').value,
+    );
+    ipcRenderer.send(
+      'send-color-data',
+      data,
+      comName,
+      maxBufferSize,
+      sendingInterval,
+    );
     state.isSendingColorData = true;
+    state.isComNameFixed = true;
     update();
   });
 
@@ -159,6 +178,7 @@ export function index() {
     const savingState = Object.assign({}, state);
     savingState.isMouseDown = false;
     savingState.isSendingColorData = false;
+    savingState.isComNameFixed = false;
     ipcRenderer.send('save-state', JSON.stringify(savingState));
   });
 
@@ -209,7 +229,7 @@ export function index() {
     logger.log(message);
   });
 
-  const logger = new DomLogger(document.getElementById("logger"), 8);
+  const logger = new DomLogger(document.getElementById('logger'), 8);
 
   state.rowNumber =
     8 * parseInt(document.getElementById('rowNumberInput').value);

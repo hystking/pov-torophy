@@ -5,6 +5,7 @@ const { Logger } = require('./Logger');
 
 let mainWindow;
 let logger;
+let port;
 
 app.on('ready', () => {
   // メインのウィンドウ
@@ -34,7 +35,8 @@ ipcMain.on('send-color-data', (event, data, comName, maxBufferSize, sendingInter
   // シリアルポートで色データを送る
   function sendChunk(sendingIndex) {
     if (sendingIndex >= data.length) {
-      port.close();
+      logger.log('送信終了');
+      event.sender.send('send-color-data-completed');
       return;
     }
     const subBufferSize = Math.min(data.length - sendingIndex, maxBufferSize);
@@ -51,17 +53,14 @@ ipcMain.on('send-color-data', (event, data, comName, maxBufferSize, sendingInter
       }, sendingInterval);
     });
   }
-  // const buffer = Buffer.from(data);
-  const port = new Serialport(comName);
+
+  if(port == null) {
+    port = new Serialport(comName);
+  }
 
   port.on('error', err => {
     logger.log('送信中にエラーが起きました');
     logger.log(err.message);
-    event.sender.send('send-color-data-completed');
-  });
-
-  port.on('close', err => {
-    logger.log('送信終了');
     event.sender.send('send-color-data-completed');
   });
 
