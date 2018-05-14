@@ -10,7 +10,7 @@ export function index() {
     colorData: [],
     isMouseDown: false,
     isSendingColorData: false,
-    isComNameFixed: false,
+    isPortOpened: false,
   };
 
   function resize() {
@@ -95,6 +95,9 @@ export function index() {
     if (state.isSendingColorData) {
       document.getElementById('sendButton').textContent = '送信中…';
       document.getElementById('sendButton').setAttribute('disabled', '1');
+    } else if(!state.isPortOpened) {
+      document.getElementById('sendButton').textContent = '送信';
+      document.getElementById('sendButton').setAttribute('disabled', '1');
     } else {
       document.getElementById('sendButton').textContent = '送信';
       document.getElementById('sendButton').removeAttribute('disabled');
@@ -107,10 +110,14 @@ export function index() {
       state.rowNumber / 8,
     );
 
-    if (state.isComNameFixed) {
+    if (state.isPortOpened) {
       document.getElementById('comNameList').setAttribute('disabled', '1');
+      document.getElementById('baudRate').setAttribute('disabled', '1');
+      document.getElementById('openPortButton').setAttribute('disabled', '1');
     } else {
       document.getElementById('comNameList').removeAttribute('disabled');
+      document.getElementById('baudRate').removeAttribute('disabled');
+      document.getElementById('openPortButton').removeAttribute('disabled');
     }
   }
 
@@ -146,16 +153,29 @@ export function index() {
     state.isMouseDown = false;
   });
 
-  document.getElementById('sendButton').addEventListener('click', () => {
-    if (state.isSendingColorData) {
+  document.getElementById('openPortButton').addEventListener('click', () => {
+    if(state.isPortOpened) {
       return;
     }
-    const data = encodeColorDataToSend(state.colorData);
     const comNameListDom = document.getElementById('comNameList');
     const comName =
       comNameListDom.options == null
         ? ''
         : comNameListDom.options[comNameListDom.selectedIndex].value;
+    const baudRate = parseInt(
+      document.getElementById('baudRate').value,
+    );
+    ipcRenderer.send('open-port', comName, baudRate);
+  });
+
+  document.getElementById('sendButton').addEventListener('click', () => {
+    if (!state.isPortOpened) {
+      return;
+    }
+    if (state.isSendingColorData) {
+      return;
+    }
+    const data = encodeColorDataToSend(state.colorData);
     const maxBufferSize = parseInt(
       document.getElementById('maxBufferSize').value,
     );
@@ -165,12 +185,10 @@ export function index() {
     ipcRenderer.send(
       'send-color-data',
       data,
-      comName,
       maxBufferSize,
       sendingInterval,
     );
     state.isSendingColorData = true;
-    state.isComNameFixed = true;
     update();
   });
 
@@ -178,7 +196,7 @@ export function index() {
     const savingState = Object.assign({}, state);
     savingState.isMouseDown = false;
     savingState.isSendingColorData = false;
-    savingState.isComNameFixed = false;
+    savingState.isPortOpened = false;
     ipcRenderer.send('save-state', JSON.stringify(savingState));
   });
 
@@ -188,6 +206,11 @@ export function index() {
 
   ipcRenderer.on('send-color-data-completed', () => {
     state.isSendingColorData = false;
+    update();
+  });
+
+  ipcRenderer.on('port-opened', () => {
+    state.isPortOpened = true;
     update();
   });
 
