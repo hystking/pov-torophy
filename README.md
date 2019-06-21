@@ -1,6 +1,6 @@
 # PovTorophy
 
-![ss.png]()
+![ss.png](ss.png)
 
 ## ビルドのしかた
 
