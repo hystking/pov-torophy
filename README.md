@@ -1,5 +1,7 @@
 # PovTorophy
 
+![ss.png](ss.png)
+
 ## ビルドのしかた
 
 node modules をインストール
