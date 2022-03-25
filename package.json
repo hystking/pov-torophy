@@ -28,7 +28,7 @@
     "babel-preset-env": "^1.6.1",
     "css-mqpacker": "^6.0.2",
     "cssnano": "^3.10.0",
-    "electron": "^1.8.4",
+    "electron": "^13.6.6",
     "electron-builder": "^20.10.0",
     "postcss-cli": "^5.0.0",
     "postcss-import": "^11.1.0",
